@@ -1,0 +1,9 @@
+# Transcrições das aulas e anotações pessoais (ficam só no computador)
+*.txt
+# exceção: modelo de configuração do Lab 13
+!env.txt
+
+# Arquivos gerados ao executar os notebooks
+app.py
+__pycache__/
+.ipynb_checkpoints/

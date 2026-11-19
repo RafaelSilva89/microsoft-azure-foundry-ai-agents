@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="419" viewBox="0 0 1200 419" role="img" aria-labelledby="t d" font-family="Segoe UI, Arial, Helvetica, sans-serif">
+<title id="t">Como o agente analisa um arquivo com o Code Interpreter</title>
+<desc id="d">Fluxo: o CSV é enviado ao Foundry; a pergunta pede um gráfico; o agente escreve código para ler o CSV, executa na sandbox, escreve o código do gráfico, executa e devolve o PNG, que o notebook baixa.</desc>
+<defs>
+<marker id="aAz" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0078D4"/></marker>
+<marker id="aNavy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#243A5E"/></marker>
+<marker id="aGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#107C10"/></marker>
+<marker id="aPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8661C5"/></marker>
+<marker id="aOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#CA5010"/></marker>
+<marker id="aTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#038387"/></marker>
+<marker id="aGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C19C00"/></marker>
+<marker id="aGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7A7A7A"/></marker>
+<marker id="aRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D13438"/></marker>
+<marker id="aMagenta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B4009E"/></marker>
+</defs>
+<rect x="0" y="0" width="1200" height="419" fill="#FFFFFF"/>
+<text x="600" y="34" font-size="20" fill="#243A5E" text-anchor="middle" font-weight="bold">Como o agente analisa um arquivo com o Code Interpreter</text>
+<text x="600" y="58" font-size="14" fill="#505050" text-anchor="middle">O modelo não &quot;calcula de cabeça&quot;: ele escreve um programa Python e executa em um ambiente isolado (sandbox).</text>
+<rect x="40" y="78" width="1120" height="50" rx="25" fill="#EAF5EA" stroke="#107C10" stroke-width="1.6"/>
+<text x="64" y="109" font-size="14" fill="#107C10" text-anchor="start" font-weight="bold">Pergunta:</text>
+<text x="140" y="109" font-size="14" fill="#243A5E" text-anchor="start" font-style="italic">&quot;Crie um gráfico de colunas com os produtos no eixo x e os preços no eixo y&quot;</text>
+<rect x="40.0" y="160.0" width="196.8" height="147.0" rx="8" fill="#FFF8E6" stroke="#C19C00" stroke-width="2"/>
+<circle cx="62.0" cy="182.0" r="12" fill="#C19C00"/>
+<text x="62.0" y="187.0" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="bold">1</text>
+<text x="148.4" y="187.0" font-size="14" fill="#8A6D00" text-anchor="middle" font-weight="bold">CSV no Foundry</text>
+<text x="138.4" y="212.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">upload do arquivo</text>
+<text x="138.4" y="231.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">electronics_products</text>
+<text x="138.4" y="250.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">→ recebe um file_id</text>
+<text x="138.4" y="269.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">ligado ao agente</text>
+<line x1="238.8" y1="233.5" x2="268.8" y2="233.5" stroke="#243A5E" stroke-width="2.2" marker-end="url(#aNavy)"/>
+<rect x="270.8" y="160.0" width="196.8" height="147.0" rx="8" fill="#FBEAF8" stroke="#B4009E" stroke-width="2"/>
+<circle cx="292.8" cy="182.0" r="12" fill="#B4009E"/>
+<text x="292.8" y="187.0" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="bold">2</text>
+<text x="379.20000000000005" y="187.0" font-size="14" fill="#B4009E" text-anchor="middle" font-weight="bold">Explora os dados</text>
+<text x="369.20000000000005" y="212.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">import pandas as pd</text>
+<text x="369.20000000000005" y="231.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">df = pd.read_csv(…)</text>
+<text x="369.20000000000005" y="250.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">df.head()</text>
+<text x="369.20000000000005" y="269.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">&quot;colunas: nome, preço&quot;</text>
+<line x1="469.6" y1="233.5" x2="499.6" y2="233.5" stroke="#243A5E" stroke-width="2.2" marker-end="url(#aNavy)"/>
+<rect x="501.6" y="160.0" width="196.8" height="147.0" rx="8" fill="#FBEAF8" stroke="#B4009E" stroke-width="2"/>
+<circle cx="523.6" cy="182.0" r="12" fill="#B4009E"/>
+<text x="523.6" y="187.0" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="bold">3</text>
+<text x="610.0" y="187.0" font-size="14" fill="#B4009E" text-anchor="middle" font-weight="bold">Gera o gráfico</text>
+<text x="600.0" y="212.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">import matplotlib</text>
+<text x="600.0" y="231.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">plt.bar(nome, preço)</text>
+<text x="600.0" y="250.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">plt.savefig(&quot;….png&quot;)</text>
+<text x="600.0" y="269.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">(roda na sandbox)</text>
+<line x1="700.4000000000001" y1="233.5" x2="730.4000000000001" y2="233.5" stroke="#243A5E" stroke-width="2.2" marker-end="url(#aNavy)"/>
+<rect x="732.4000000000001" y="160.0" width="196.8" height="147.0" rx="8" fill="#EEF1F6" stroke="#243A5E" stroke-width="2"/>
+<circle cx="754.4000000000001" cy="182.0" r="12" fill="#243A5E"/>
+<text x="754.4000000000001" y="187.0" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="bold">4</text>
+<text x="840.8000000000001" y="187.0" font-size="14" fill="#243A5E" text-anchor="middle" font-weight="bold">Responde</text>
+<text x="830.8000000000001" y="212.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">&quot;Aqui está o gráfico</text>
+<text x="830.8000000000001" y="231.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">de colunas…&quot;</text>
+<text x="830.8000000000001" y="250.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">+ anotação com o</text>
+<text x="830.8000000000001" y="269.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">arquivo gerado</text>
+<line x1="931.2" y1="233.5" x2="961.2" y2="233.5" stroke="#243A5E" stroke-width="2.2" marker-end="url(#aNavy)"/>
+<rect x="963.2" y="160.0" width="196.8" height="147.0" rx="8" fill="#EAF5EA" stroke="#107C10" stroke-width="2"/>
+<circle cx="985.2" cy="182.0" r="12" fill="#107C10"/>
+<text x="985.2" y="187.0" font-size="13" fill="#FFFFFF" text-anchor="middle" font-weight="bold">5</text>
+<text x="1071.6000000000001" y="187.0" font-size="14" fill="#107C10" text-anchor="middle" font-weight="bold">Download</text>
+<text x="1061.6000000000001" y="212.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">file_id + container_id</text>
+<text x="1061.6000000000001" y="231.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">→ containers.files</text>
+<text x="1061.6000000000001" y="250.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">→ PNG salvo</text>
+<text x="1061.6000000000001" y="269.0" font-size="12.5" fill="#3B3B3B" text-anchor="middle">na pasta local</text>
+<rect x="40" y="333" width="1120" height="70" rx="8" fill="#FFF4EC" stroke="#CA5010" stroke-width="1.6"/>
+<text x="60" y="357" font-size="13" fill="#CA5010" text-anchor="start" font-weight="bold">Por que isso importa</text>
+<text x="60" y="377" font-size="13" fill="#3B3B3B" text-anchor="start">Contas e gráficos saem de código executado de verdade (resultado exato e auditável no tracing), e não de um &quot;palpite&quot; do modelo.</text>
+</svg>

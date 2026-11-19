@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1060" viewBox="0 0 1400 1060" role="img" aria-labelledby="t d" font-family="Segoe UI, Arial, Helvetica, sans-serif">
+<title id="t">Microsoft Foundry · Arquitetura do agente básico em Python</title>
+<desc id="d">Agente Batman criado com o SDK azure-ai-projects no Microsoft Foundry. No computador local, o notebook agent_run.ipynb ou a aplicação Streamlit app.py lê o arquivo .env (FOUNDRY_PROJECT_ENDPOINT e MODEL_DEPLOYMENT_NAME) e se autentica com DefaultAzureCredential no Microsoft Entra ID. Com o AIProjectClient, cria uma versão do agente batman-agent no Foundry Agent Service (PromptAgentDefinition com modelo e instruções). Com o cliente OpenAI obtido do projeto, cria uma conversa (conversation.id) e envia as mensagens com responses.create usando agent_reference. O agente envia instruções, histórico e pergunta ao deployment do modelo GPT-4 e devolve a resposta. O histórico fica salvo na conversa, e cada chamada aparece no tracing do portal Foundry com o consumo de tokens.</desc>
+<defs>
+  <marker id="aBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0078D4"/></marker>
+  <marker id="aDark" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#243A5E"/></marker>
+  <marker id="aGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#107C10"/></marker>
+  <marker id="aPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8661C5"/></marker>
+  <marker id="aOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#CA5010"/></marker>
+</defs>
+
+<rect x="0" y="0" width="1400" height="1060" fill="#FFFFFF"/>
+
+<!-- ===================== título ===================== -->
+<text x="700" y="36" font-size="21" font-weight="bold" fill="#243A5E" text-anchor="middle">Agente Batman · Microsoft Foundry Agent Service com Python</text>
+<text x="700" y="60" font-size="14" fill="#505050" text-anchor="middle">.env → autenticação (Entra ID) → cria o agente (versão) → cria a conversa → envia mensagens → resposta com memória + tracing</text>
+
+<!-- ===================== computador local ===================== -->
+<rect x="20" y="90" width="380" height="730" rx="6" fill="#F7F7F7" stroke="#7A7A7A" stroke-width="2" stroke-dasharray="8,5"/>
+<text x="38" y="116" font-size="15" font-weight="bold" fill="#3B3B3B">Computador local</text>
+
+<!-- usuário -->
+<rect x="40" y="132" width="340" height="66" rx="8" fill="#FFFFFF" stroke="#243A5E" stroke-width="1.6"/>
+<text x="210" y="160" font-size="15" font-weight="bold" fill="#243A5E" text-anchor="middle">Usuário</text>
+<text x="210" y="182" font-size="13" fill="#505050" text-anchor="middle">digita a pergunta (input() ou chat do Streamlit)</text>
+<line x1="210" y1="198" x2="210" y2="238" stroke="#243A5E" stroke-width="2" marker-end="url(#aDark)"/>
+
+<!-- aplicação -->
+<rect x="40" y="240" width="340" height="160" rx="8" fill="#E8F1FB" stroke="#0078D4" stroke-width="2"/>
+<text x="210" y="266" font-size="15" font-weight="bold" fill="#0078D4" text-anchor="middle">Aplicação Python</text>
+<text x="210" y="290" font-size="13" fill="#243A5E" text-anchor="middle">agent_run.ipynb  ·  app.py (Streamlit :8501)</text>
+<rect x="58" y="304" width="304" height="36" rx="5" fill="#FFFFFF" stroke="#9CC3EA"/>
+<text x="210" y="327" font-size="13" fill="#243A5E" text-anchor="middle">AIProjectClient  (azure-ai-projects 2.0.0b2)</text>
+<rect x="58" y="348" width="304" height="36" rx="5" fill="#FFFFFF" stroke="#9CC3EA"/>
+<text x="210" y="371" font-size="13" fill="#243A5E" text-anchor="middle">OpenAI client  (project_client.get_openai_client)</text>
+
+<!-- .env -->
+<rect x="40" y="440" width="340" height="96" rx="8" fill="#FFF8E6" stroke="#C19C00" stroke-width="1.6"/>
+<text x="210" y="466" font-size="15" font-weight="bold" fill="#8A6D00" text-anchor="middle">.env  (python-dotenv)</text>
+<text x="210" y="490" font-size="13" fill="#505050" text-anchor="middle">FOUNDRY_PROJECT_ENDPOINT</text>
+<text x="210" y="510" font-size="13" fill="#505050" text-anchor="middle">MODEL_DEPLOYMENT_NAME</text>
+<text x="210" y="528" font-size="11.5" fill="#8A6D00" text-anchor="middle">fora do código · não vai para o GitHub</text>
+<line x1="210" y1="440" x2="210" y2="402" stroke="#C19C00" stroke-width="2" marker-end="url(#aOrange)"/>
+
+<!-- credencial -->
+<rect x="40" y="576" width="340" height="96" rx="8" fill="#F3EEFB" stroke="#8661C5" stroke-width="1.6"/>
+<text x="210" y="602" font-size="15" font-weight="bold" fill="#5C3D99" text-anchor="middle">DefaultAzureCredential</text>
+<text x="210" y="626" font-size="13" fill="#505050" text-anchor="middle">reaproveita o login do "az login"</text>
+<text x="210" y="646" font-size="13" fill="#505050" text-anchor="middle">ou da conta Azure no VS Code</text>
+<text x="210" y="664" font-size="11.5" fill="#5C3D99" text-anchor="middle">sem chave de API escrita no código</text>
+<path d="M40,624 H28 V320 H38" fill="none" stroke="#8661C5" stroke-width="2" marker-end="url(#aPurple)"/>
+
+<!-- session_state -->
+<rect x="40" y="712" width="340" height="88" rx="8" fill="#FFFFFF" stroke="#7A7A7A" stroke-width="1.4"/>
+<text x="210" y="738" font-size="14" font-weight="bold" fill="#3B3B3B" text-anchor="middle">st.session_state  (só no Streamlit)</text>
+<text x="210" y="760" font-size="13" fill="#505050" text-anchor="middle">guarda o conversation.id e as mensagens</text>
+<text x="210" y="780" font-size="13" fill="#505050" text-anchor="middle">exibidas, entre uma interação e outra</text>
+
+<!-- ===================== Azure ===================== -->
+<rect x="440" y="90" width="940" height="730" rx="6" fill="#FFFFFF" stroke="#0078D4" stroke-width="2"/>
+<text x="460" y="116" font-size="15" font-weight="bold" fill="#0078D4">Microsoft Azure</text>
+
+<!-- Entra ID -->
+<rect x="470" y="132" width="330" height="76" rx="8" fill="#F3EEFB" stroke="#8661C5" stroke-width="1.6"/>
+<text x="635" y="160" font-size="15" font-weight="bold" fill="#5C3D99" text-anchor="middle">Microsoft Entra ID</text>
+<text x="635" y="184" font-size="13" fill="#505050" text-anchor="middle">valida a identidade e emite o token de acesso</text>
+
+<!-- projeto Foundry -->
+<rect x="460" y="236" width="900" height="566" rx="8" fill="#F5F9FE" stroke="#0078D4" stroke-width="1.6" stroke-dasharray="7,4"/>
+<text x="480" y="262" font-size="15" font-weight="bold" fill="#0078D4">Projeto Microsoft Foundry</text>
+<text x="1340" y="262" font-size="12.5" fill="#505050" text-anchor="end">acessado pelo FOUNDRY_PROJECT_ENDPOINT</text>
+
+<!-- Agent Service -->
+<rect x="490" y="284" width="400" height="250" rx="8" fill="#FFFFFF" stroke="#0078D4" stroke-width="2"/>
+<text x="690" y="310" font-size="15" font-weight="bold" fill="#0078D4" text-anchor="middle">Foundry Agent Service</text>
+<rect x="510" y="324" width="360" height="194" rx="6" fill="#E8F1FB" stroke="#9CC3EA"/>
+<text x="690" y="348" font-size="14.5" font-weight="bold" fill="#243A5E" text-anchor="middle">Agente: batman-agent</text>
+<text x="690" y="372" font-size="13" fill="#243A5E" text-anchor="middle">PromptAgentDefinition</text>
+<text x="690" y="394" font-size="12.5" fill="#505050" text-anchor="middle">model = MODEL_DEPLOYMENT_NAME</text>
+<text x="690" y="414" font-size="12.5" fill="#505050" text-anchor="middle">instructions = "You are Batman, the Dark Knight..."</text>
+<rect x="540" y="434" width="80" height="30" rx="15" fill="#0078D4"/>
+<text x="580" y="454" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">v1</text>
+<rect x="650" y="434" width="80" height="30" rx="15" fill="#2B88D8"/>
+<text x="690" y="454" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">v2</text>
+<rect x="760" y="434" width="80" height="30" rx="15" fill="#6CB8F6"/>
+<text x="800" y="454" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">v3 …</text>
+<line x1="620" y1="449" x2="648" y2="449" stroke="#0078D4" stroke-width="1.6" marker-end="url(#aBlue)"/>
+<line x1="730" y1="449" x2="758" y2="449" stroke="#0078D4" stroke-width="1.6" marker-end="url(#aBlue)"/>
+<text x="690" y="490" font-size="12" fill="#505050" text-anchor="middle">cada create_version gera uma nova versão;</text>
+<text x="690" y="507" font-size="12" fill="#505050" text-anchor="middle">o agent_reference usa a mais recente</text>
+
+<!-- Modelo -->
+<rect x="960" y="284" width="380" height="130" rx="8" fill="#FFFFFF" stroke="#243A5E" stroke-width="2"/>
+<text x="1150" y="312" font-size="15" font-weight="bold" fill="#243A5E" text-anchor="middle">Deployment do modelo</text>
+<text x="1150" y="340" font-size="14" fill="#0078D4" text-anchor="middle">GPT-4  ·  Azure OpenAI</text>
+<text x="1150" y="364" font-size="12.5" fill="#505050" text-anchor="middle">nome = MODEL_DEPLOYMENT_NAME</text>
+<text x="1150" y="392" font-size="12" fill="#505050" text-anchor="middle">gera o texto no "personagem" do Batman</text>
+
+<!-- Tracing -->
+<rect x="960" y="456" width="380" height="140" rx="8" fill="#FFFFFF" stroke="#CA5010" stroke-width="2"/>
+<text x="1150" y="484" font-size="15" font-weight="bold" fill="#CA5010" text-anchor="middle">Tracing (observabilidade)</text>
+<text x="1150" y="510" font-size="13" fill="#505050" text-anchor="middle">entrada, saída e tokens de cada chamada</text>
+<text x="1150" y="536" font-size="13" fill="#3B3B3B" text-anchor="middle">1ª chamada: 139 tokens</text>
+<text x="1150" y="556" font-size="13" fill="#3B3B3B" text-anchor="middle">conversa completa: 219 tokens</text>
+<text x="1150" y="580" font-size="11.5" fill="#CA5010" text-anchor="middle">o histórico faz o consumo crescer a cada mensagem</text>
+
+<!-- Conversations -->
+<rect x="490" y="590" width="400" height="192" rx="8" fill="#FFFFFF" stroke="#107C10" stroke-width="2"/>
+<text x="690" y="616" font-size="15" font-weight="bold" fill="#107C10" text-anchor="middle">Conversations (memória)</text>
+<text x="690" y="638" font-size="12.5" fill="#505050" text-anchor="middle">conversation.id = "conv_…"</text>
+<rect x="510" y="650" width="360" height="26" rx="4" fill="#EAF5EA"/>
+<text x="522" y="668" font-size="12.5" fill="#243A5E">usuário: "Meu nome é Kuljot. Como está Gotham?"</text>
+<rect x="510" y="680" width="360" height="26" rx="4" fill="#F4F4F4"/>
+<text x="522" y="698" font-size="12.5" fill="#243A5E">batman: "Gotham segue sombria e perigosa…"</text>
+<rect x="510" y="710" width="360" height="26" rx="4" fill="#EAF5EA"/>
+<text x="522" y="728" font-size="12.5" fill="#243A5E">usuário: "Qual era o meu nome?"</text>
+<rect x="510" y="740" width="360" height="26" rx="4" fill="#F4F4F4"/>
+<text x="522" y="758" font-size="12.5" fill="#243A5E">batman: "Você disse que se chama Kuljot."</text>
+
+<!-- Portal -->
+<rect x="960" y="636" width="380" height="146" rx="8" fill="#FFFFFF" stroke="#7A7A7A" stroke-width="1.6"/>
+<text x="1150" y="664" font-size="15" font-weight="bold" fill="#3B3B3B" text-anchor="middle">Portal Foundry (ai.azure.com)</text>
+<text x="1150" y="690" font-size="13" fill="#505050" text-anchor="middle">Agentes → batman-agent → versões</text>
+<text x="1150" y="712" font-size="13" fill="#505050" text-anchor="middle">Traces → conversa → tokens</text>
+<text x="1150" y="734" font-size="13" fill="#505050" text-anchor="middle">também visível em portal.azure.com</text>
+<text x="1150" y="762" font-size="11.5" fill="#7A7A7A" text-anchor="middle">tudo criado pelo código aparece aqui</text>
+
+<!-- ===================== setas entre local e Azure ===================== -->
+<!-- ① autenticação -->
+<path d="M380,252 H440 V170 H468" fill="none" stroke="#8661C5" stroke-width="2.2" marker-end="url(#aPurple)"/>
+<circle cx="418" cy="230" r="12" fill="#8661C5"/><text x="418" y="235" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">1</text>
+
+<!-- ② create_version -->
+<line x1="380" y1="318" x2="488" y2="318" stroke="#0078D4" stroke-width="2.2" marker-end="url(#aBlue)"/>
+<circle cx="418" cy="302" r="12" fill="#0078D4"/><text x="418" y="307" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">2</text>
+
+<!-- ④ responses.create (ida e volta) -->
+<line x1="382" y1="372" x2="488" y2="372" stroke="#243A5E" stroke-width="2.2" marker-start="url(#aDark)" marker-end="url(#aDark)"/>
+<circle cx="418" cy="356" r="12" fill="#243A5E"/><text x="418" y="361" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">4</text>
+
+<!-- ③ conversations.create -->
+<path d="M380,392 H452 V640 H488" fill="none" stroke="#107C10" stroke-width="2.2" marker-end="url(#aGreen)"/>
+<circle cx="452" cy="520" r="12" fill="#107C10"/><text x="452" y="525" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">3</text>
+
+<!-- ===================== setas dentro do Foundry ===================== -->
+<!-- ⑤ agente <-> modelo -->
+<line x1="890" y1="336" x2="958" y2="336" stroke="#243A5E" stroke-width="2.2" marker-end="url(#aDark)"/>
+<line x1="958" y1="372" x2="892" y2="372" stroke="#243A5E" stroke-width="2.2" marker-end="url(#aDark)"/>
+<circle cx="924" cy="354" r="12" fill="#243A5E"/><text x="924" y="359" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">5</text>
+
+<!-- agente <-> conversa -->
+<line x1="690" y1="536" x2="690" y2="588" stroke="#107C10" stroke-width="2.2" marker-start="url(#aGreen)" marker-end="url(#aGreen)"/>
+<text x="702" y="566" font-size="12" fill="#107C10">lê e grava o histórico</text>
+
+<!-- ⑥ tracing -->
+<line x1="890" y1="510" x2="958" y2="510" stroke="#CA5010" stroke-width="2.2" marker-end="url(#aOrange)"/>
+<circle cx="924" cy="492" r="12" fill="#CA5010"/><text x="924" y="497" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">6</text>
+<line x1="1150" y1="596" x2="1150" y2="634" stroke="#CA5010" stroke-width="2" marker-end="url(#aOrange)"/>
+
+<!-- ===================== legenda ===================== -->
+<rect x="20" y="844" width="1360" height="196" rx="6" fill="#F5F9FE" stroke="#9CC3EA"/>
+<text x="40" y="872" font-size="15" font-weight="bold" fill="#243A5E">Passo a passo</text>
+
+<circle cx="52" cy="898" r="11" fill="#8661C5"/><text x="52" y="903" font-size="12.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="72" y="903" font-size="13.5" fill="#3B3B3B"><tspan font-weight="bold">Autenticação:</tspan> DefaultAzureCredential pede um token ao Entra ID usando o login já feito na máquina.</text>
+<circle cx="52" cy="928" r="11" fill="#0078D4"/><text x="52" y="933" font-size="12.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="72" y="933" font-size="13.5" fill="#3B3B3B"><tspan font-weight="bold">Cria o agente:</tspan> project_client.agents.create_version registra o batman-agent (modelo + instruções) como uma nova versão.</text>
+<circle cx="52" cy="958" r="11" fill="#107C10"/><text x="52" y="963" font-size="12.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="72" y="963" font-size="13.5" fill="#3B3B3B"><tspan font-weight="bold">Cria a conversa:</tspan> openai_client.conversations.create devolve o conversation.id, onde o histórico do chat fica guardado.</text>
+<circle cx="52" cy="988" r="11" fill="#243A5E"/><text x="52" y="993" font-size="12.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="72" y="993" font-size="13.5" fill="#3B3B3B"><tspan font-weight="bold">Envia a mensagem:</tspan> openai_client.responses.create(conversation=…, agent_reference=batman-agent) e recebe o output_text.</text>
+<circle cx="52" cy="1018" r="11" fill="#243A5E"/><text x="52" y="1023" font-size="12.5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">5</text>
+<text x="72" y="1023" font-size="13.5" fill="#3B3B3B"><tspan font-weight="bold">Gera a resposta:</tspan> o agente envia instruções + histórico + pergunta ao GPT-4.  <tspan font-weight="bold" fill="#CA5010">6 Tracing:</tspan> cada chamada fica registrada com os tokens no portal.</text>
+</svg>
